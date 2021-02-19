@@ -13,29 +13,29 @@ import (
 )
 
 func NewFileMonitor(name string) (*Monitor, error) {
-    if _, err := os.Stat(name); err != nil {
-        return nil, err
-    }
-    name = filepath.Join("/aha/fs/modFile.monFactory", name) + ".mon"
-    return NewMonitor(name, "")
+	if _, err := os.Stat(name); err != nil {
+		return nil, err
+	}
+	name = filepath.Join("/aha/fs/modFile.monFactory", name) + ".mon"
+	return NewMonitor(name, "")
 }
 
 func NewFileAttrMonitor(name string) (*Monitor, error) {
-    if _, err := os.Stat(name); err != nil {
-        return nil, err
-    }
-    name = filepath.Join("/aha/fs/modFileAttr.monFactory", name) + ".mon"
-    return NewMonitor(name, "")
+	if _, err := os.Stat(name); err != nil {
+		return nil, err
+	}
+	name = filepath.Join("/aha/fs/modFileAttr.monFactory", name) + ".mon"
+	return NewMonitor(name, "")
 }
 
 func NewDirMonitor(name string) (*Monitor, error) {
-    if fi, err := os.Stat(name); err != nil {
-        return nil, err
-    } else if !fi.IsDir() {
-        return nil, fmt.Errorf("not a directory")
-    }
-    name = filepath.Join("/aha/fs/modDir.monFactory", name) + ".mon"
-    return NewMonitor(name, "")
+	if fi, err := os.Stat(name); err != nil {
+		return nil, err
+	} else if !fi.IsDir() {
+		return nil, fmt.Errorf("not a directory")
+	}
+	name = filepath.Join("/aha/fs/modDir.monFactory", name) + ".mon"
+	return NewMonitor(name, "")
 }
 
 func NewMonitor(name, params string) (*Monitor, error) {
