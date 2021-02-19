@@ -12,8 +12,34 @@ import (
 	"golang.org/x/sys/unix"
 )
 
+func NewFileMonitor(name string) (*Monitor, error) {
+    if _, err := os.Stat(name); err != nil {
+        return nil, err
+    }
+    name = filepath.Join("/aha/fs/modFile.monFactory", name) + ".mon"
+    return NewMonitor(name, "")
+}
+
+func NewFileAttrMonitor(name string) (*Monitor, error) {
+    if _, err := os.Stat(name); err != nil {
+        return nil, err
+    }
+    name = filepath.Join("/aha/fs/modFileAttr.monFactory", name) + ".mon"
+    return NewMonitor(name, "")
+}
+
+func NewDirMonitor(name string) (*Monitor, error) {
+    if fi, err := os.Stat(name); err != nil {
+        return nil, err
+    } else if !fi.IsDir() {
+        return nil, fmt.Errorf("not a directory")
+    }
+    name = filepath.Join("/aha/fs/modDir.monFactory", name) + ".mon"
+    return NewMonitor(name, "")
+}
+
 func NewMonitor(name, params string) (*Monitor, error) {
-	if !is_aha_mounted() {
+	if !isAhaMounted() {
 		return nil, fmt.Errorf("AHAFS is not mounted")
 	}
 	if params == "" {
@@ -23,7 +49,7 @@ func NewMonitor(name, params string) (*Monitor, error) {
 	if err := os.MkdirAll(filepath.Dir(name), 0755); err != nil {
 		return nil, err
 	}
-	fd, err := aha_creat(name, 0666)
+	fd, err := ahaCreat(name, 0666)
 	if err != nil {
 		return nil, err
 	}

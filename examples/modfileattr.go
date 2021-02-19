@@ -7,14 +7,14 @@ import (
 )
 
 func main() {
-	if m, err := ahafs.NewMonitor("/aha/fs/modFileAttr.monFactory/etc/resolv.conf.mon", ""); err != nil {
+	if m, err := ahafs.NewFileAttrMonitor("/etc/resolv.conf"); err != nil {
 		fmt.Println("ERROR:", err)
 	} else {
 		c := make(chan ahafs.Event)
 		go m.Watch(c)
 		for {
 			// waiting for event
-			e := <- c
+			e := <-c
 			fmt.Printf("%v\n", e)
 		}
 	}

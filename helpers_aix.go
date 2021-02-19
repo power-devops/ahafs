@@ -14,11 +14,11 @@ import (
 	"golang.org/x/sys/unix"
 )
 
-func aha_creat(path string, mode uint32) (fd int, err error) {
+func ahaCreat(path string, mode uint32) (fd int, err error) {
 	return unix.Open(path, unix.O_CREAT|unix.O_RDWR|unix.O_TRUNC, mode)
 }
 
-func is_aha_mounted() bool {
+func isAhaMounted() bool {
 	st := unix.Stat_t{}
 	err := unix.Stat("/aha", &st)
 	if err != nil {

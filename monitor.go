@@ -15,6 +15,24 @@ func NewMonitor(name, params string) (*Monitor, error) {
 	return nil, fmt.Errorf("not AIX")
 }
 
+// NewFileMonitor creates a new file monitor in AHAFS filesystem.
+// File monitor can be created only if the file already exists.
+func NewFileMonitor(name string) (*Monitor, error) {
+	return nil, fmt.Errorf("not AIX")
+}
+
+// NewFileAttrMonitor creates a new file attribute monitor in AHAFS filesystem.
+// File attribute monitor can be created only if the file already exists.
+func NewFileAttrMonitor(name string) (*Monitor, error) {
+	return nil, fmt.Errorf("not AIX")
+}
+
+// NewDirMonitor creates a new directory monitor in AHAFS filesystem.
+// Directory monitor can be created only if the directory already exists.
+func NewDirMonitor(name string) (*Monitor, error) {
+	return nil, fmt.Errorf("not AIX")
+}
+
 // Watch monitors for new events in the defined monitor and send events into the channel
 func (m *Monitor) Watch(c chan Event) error {
 	return fmt.Errorf("not AIX")
