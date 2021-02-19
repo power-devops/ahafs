@@ -33,6 +33,11 @@ func NewDirMonitor(name string) (*Monitor, error) {
 	return nil, fmt.Errorf("not AIX")
 }
 
+// Close closes the file descriptor and ends monitoring of the object.
+func (m *Monitor) Close() error {
+	return fmt.Errorf("not AIX")
+}
+
 // Watch monitors for new events in the defined monitor and send events into the channel
 func (m *Monitor) Watch(c chan Event) error {
 	return fmt.Errorf("not AIX")

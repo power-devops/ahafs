@@ -64,6 +64,10 @@ func NewMonitor(name, params string) (*Monitor, error) {
 	return m, nil
 }
 
+func (m *Monitor) Close() error {
+    return unix.Close(m.Fd)
+}
+
 func (m *Monitor) Watch(c chan Event) error {
 	readfds := &unix.FdSet{}
 	readfds.Set(m.Fd)
