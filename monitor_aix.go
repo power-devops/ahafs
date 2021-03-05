@@ -16,7 +16,7 @@ func NewFileMonitor(name string) (*Monitor, error) {
 	if _, err := os.Stat(name); err != nil {
 		return nil, err
 	}
-	name = filepath.Join("/aha/fs/modFile.monFactory", filepath.Clean(name) + ".mon")
+	name = filepath.Join("/aha/fs/modFile.monFactory", filepath.Clean(name)+".mon")
 	return NewMonitor(name, "")
 }
 
@@ -24,7 +24,7 @@ func NewFileAttrMonitor(name string) (*Monitor, error) {
 	if _, err := os.Stat(name); err != nil {
 		return nil, err
 	}
-	name = filepath.Join("/aha/fs/modFileAttr.monFactory", filepath.Clean(name) + ".mon")
+	name = filepath.Join("/aha/fs/modFileAttr.monFactory", filepath.Clean(name)+".mon")
 	return NewMonitor(name, "")
 }
 
@@ -34,7 +34,7 @@ func NewDirMonitor(name string) (*Monitor, error) {
 	} else if !fi.IsDir() {
 		return nil, fmt.Errorf("not a directory")
 	}
-	name = filepath.Join("/aha/fs/modDir.monFactory", filepath.Clean(name) + ".mon")
+	name = filepath.Join("/aha/fs/modDir.monFactory", filepath.Clean(name)+".mon")
 	return NewMonitor(name, "")
 }
 
@@ -75,7 +75,7 @@ func (m *Monitor) Watch(c chan Event) error {
 	for {
 		n, err := unix.Select(nfd, readfds, nil, nil, nil)
 		if err != nil {
-			c <- Event{Quit: true}
+            c <- Event{Quit: true, Error: err}
 			close(c)
 			return err
 		}
@@ -83,7 +83,7 @@ func (m *Monitor) Watch(c chan Event) error {
 			buf := make([]byte, 4096)
 			_, err = unix.Pread(m.Fd, buf, 0)
 			if err != nil {
-				c <- Event{Quit: true}
+                c <- Event{Quit: true, Error: err}
 				close(c)
 				return err
 			}

@@ -12,7 +12,8 @@ type Monitor struct {
 
 // Event is a generalized AHAFS event
 type Event struct {
-	Quit      bool
+	Quit      bool  // is this the last message in the channel?
+	Error     error // go error message
 	TimeSec   int
 	TimeNSec  int
 	SeqNumber int
