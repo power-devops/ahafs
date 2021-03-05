@@ -40,7 +40,7 @@ func getvalue(s string) string {
 }
 
 func buf2evt(buf []byte) Event {
-	e := Event{}
+	e := Event{Quit: false}
 	info := false
 	scanner := bufio.NewScanner(bytes.NewReader(buf))
 	for scanner.Scan() {

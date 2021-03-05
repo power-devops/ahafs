@@ -29,3 +29,8 @@ Information from event producer: %s
 func (e Event) Time() time.Time {
 	return time.Unix(int64(e.TimeSec), int64(e.TimeNSec))
 }
+
+// IsQuit returns true, if we have it is the last event in the channel
+func (e Event) IsQuit() bool {
+	return e.Quit
+}

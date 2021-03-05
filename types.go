@@ -12,6 +12,7 @@ type Monitor struct {
 
 // Event is a generalized AHAFS event
 type Event struct {
+	Quit      bool
 	TimeSec   int
 	TimeNSec  int
 	SeqNumber int

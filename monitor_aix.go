@@ -65,7 +65,7 @@ func NewMonitor(name, params string) (*Monitor, error) {
 }
 
 func (m *Monitor) Close() error {
-    return unix.Close(m.Fd)
+	return unix.Close(m.Fd)
 }
 
 func (m *Monitor) Watch(c chan Event) error {
@@ -75,12 +75,16 @@ func (m *Monitor) Watch(c chan Event) error {
 	for {
 		n, err := unix.Select(nfd, readfds, nil, nil, nil)
 		if err != nil {
+			c <- Event{Quit: true}
+			close(c)
 			return err
 		}
 		if n > 0 {
 			buf := make([]byte, 4096)
 			_, err = unix.Pread(m.Fd, buf, 0)
 			if err != nil {
+				c <- Event{Quit: true}
+				close(c)
 				return err
 			}
 			c <- buf2evt(buf)
