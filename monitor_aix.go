@@ -16,7 +16,7 @@ func NewFileMonitor(name string) (*Monitor, error) {
 	if _, err := os.Stat(name); err != nil {
 		return nil, err
 	}
-	name = filepath.Join("/aha/fs/modFile.monFactory", name) + ".mon"
+	name = filepath.Join("/aha/fs/modFile.monFactory", filepath.Clean(name) + ".mon")
 	return NewMonitor(name, "")
 }
 
@@ -24,7 +24,7 @@ func NewFileAttrMonitor(name string) (*Monitor, error) {
 	if _, err := os.Stat(name); err != nil {
 		return nil, err
 	}
-	name = filepath.Join("/aha/fs/modFileAttr.monFactory", name) + ".mon"
+	name = filepath.Join("/aha/fs/modFileAttr.monFactory", filepath.Clean(name) + ".mon")
 	return NewMonitor(name, "")
 }
 
@@ -34,7 +34,7 @@ func NewDirMonitor(name string) (*Monitor, error) {
 	} else if !fi.IsDir() {
 		return nil, fmt.Errorf("not a directory")
 	}
-	name = filepath.Join("/aha/fs/modDir.monFactory", name) + ".mon"
+	name = filepath.Join("/aha/fs/modDir.monFactory", filepath.Clean(name) + ".mon")
 	return NewMonitor(name, "")
 }
 
