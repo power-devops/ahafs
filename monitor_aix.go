@@ -68,6 +68,17 @@ func (m *Monitor) Close() error {
 	return unix.Close(m.Fd)
 }
 
+func safesend(c chan Event, value Event) (closed bool) {
+	defer func() {
+		if recover() != nil {
+			closed = true
+		}
+	}()
+
+	c <- value
+	return false
+}
+
 func (m *Monitor) Watch(c chan Event) error {
 	readfds := &unix.FdSet{}
 	readfds.Set(m.Fd)
@@ -75,7 +86,7 @@ func (m *Monitor) Watch(c chan Event) error {
 	for {
 		n, err := unix.Select(nfd, readfds, nil, nil, nil)
 		if err != nil {
-            c <- Event{Quit: true, Error: err}
+			safesend(c, Event{Quit: true, Error: err})
 			close(c)
 			return err
 		}
@@ -83,11 +94,11 @@ func (m *Monitor) Watch(c chan Event) error {
 			buf := make([]byte, 4096)
 			_, err = unix.Pread(m.Fd, buf, 0)
 			if err != nil {
-                c <- Event{Quit: true, Error: err}
+				safesend(c, Event{Quit: true, Error: err})
 				close(c)
 				return err
 			}
-			c <- buf2evt(buf)
+			safesend(c, buf2evt(buf))
 		}
 	}
 }
