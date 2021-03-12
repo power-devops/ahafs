@@ -86,16 +86,20 @@ func (m *Monitor) Watch(c chan Event) error {
 	for {
 		n, err := unix.Select(nfd, readfds, nil, nil, nil)
 		if err != nil {
-			safesend(c, Event{Quit: true, Error: err})
-			close(c)
+            closed := safesend(c, Event{Quit: true, Error: err})
+            if !closed {
+			    close(c)
+            }
 			return err
 		}
 		if n > 0 {
 			buf := make([]byte, 4096)
 			_, err = unix.Pread(m.Fd, buf, 0)
 			if err != nil {
-				safesend(c, Event{Quit: true, Error: err})
-				close(c)
+                closed := safesend(c, Event{Quit: true, Error: err})
+                if !closed {
+				    close(c)
+                }
 				return err
 			}
 			safesend(c, buf2evt(buf))
