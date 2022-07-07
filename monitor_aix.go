@@ -1,4 +1,4 @@
-// Copyright 2021 Power-Devops.com. All rights reserved.
+// Copyright 2021, 2022 Power-Devops.com. All rights reserved.
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
@@ -86,20 +86,14 @@ func (m *Monitor) Watch(c chan Event) error {
 	for {
 		n, err := unix.Select(nfd, readfds, nil, nil, nil)
 		if err != nil {
-			closed := safesend(c, Event{Quit: true, Error: err})
-			if !closed {
-				close(c)
-			}
+			safesend(c, Event{Quit: true, Error: err})
 			return err
 		}
 		if n > 0 {
 			buf := make([]byte, 4096)
 			_, err = unix.Pread(m.Fd, buf, 0)
 			if err != nil {
-				closed := safesend(c, Event{Quit: true, Error: err})
-				if !closed {
-					close(c)
-				}
+				safesend(c, Event{Quit: true, Error: err})
 				return err
 			}
 			safesend(c, buf2evt(buf))
